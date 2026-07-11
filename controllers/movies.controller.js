@@ -1,6 +1,7 @@
 import getMovies from '../data/movies.js';
+import { findMovieById } from '../services/movies.service.js';
 
-async function getAllMovies(req, res){
+export async function getAllMovies(req, res){
     try{
         const movies = await getMovies();
 
@@ -12,4 +13,27 @@ async function getAllMovies(req, res){
         })
     }
 }
-export default getAllMovies;
+
+export async function getMovieById(req, res){
+    const { id } = req.params;
+
+    try{
+
+        if(!id){
+            return res.status(400).json({
+                message: "ID required"
+            })
+        }
+
+        const movie = await findMovieById(id);
+
+        return res.status(200).json({
+            movie
+        })
+
+    }catch(error){
+        return res.status(404).json({
+            error: 'Movie not found'
+        })
+    }
+}
