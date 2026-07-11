@@ -13,3 +13,16 @@ export async function findMovieById(id){
 
     return movie;
 }
+
+export async function findAvailableSeats(){
+    const { data: seats, error } = await supabase
+        .from('seats')
+        .select('*')
+        .eq('status', 'Available')
+    
+    if(error){
+        throw new Error(error.message)
+    }
+
+    return seats
+}

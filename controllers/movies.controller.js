@@ -1,5 +1,5 @@
 import getMovies from '../data/movies.js';
-import { findMovieById } from '../services/movies.service.js';
+import { findMovieById, findAvailableSeats } from '../services/movies.service.js';
 
 export async function getAllMovies(req, res){
     try{
@@ -34,6 +34,19 @@ export async function getMovieById(req, res){
     }catch(error){
         return res.status(404).json({
             error: 'Movie not found'
+        })
+    }
+}
+
+export async function getAvailableSeats(req, res){
+    try{
+        const seats = await findAvailableSeats();
+
+        return res.status(200).json({seats})
+
+    }catch(error){
+        return res.status(500).json({
+            error: error.message
         })
     }
 }
