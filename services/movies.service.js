@@ -26,3 +26,16 @@ export async function findAvailableSeats(){
 
     return seats
 }
+
+export async function searchMovieByName(movieName){
+    const { data, error } = await supabase
+        .from('movies')
+        .select('*')
+        .ilike('movie_name', `%${movieName}%`)
+    
+    if(error){
+        throw new Error(error.message)
+    }
+
+    return data;
+}
