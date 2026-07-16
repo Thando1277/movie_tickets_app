@@ -5,11 +5,12 @@ function GenerateToken(user){
     const token = jwt.sign(
         {
             id: user.id,
-            email: user.email
+            email: user.email,
+            full_name: user.full_name
         },
         process.env.JWT_SECRET,
         {
-            expiresIn: "30m"
+            expiresIn: "1h"
         }
     );
 

@@ -109,7 +109,15 @@ export async function login(req, res){
     }
 }
 
+export async function getProfile(req, res){
+
+    const user = req.user;
+    
+    return res.status(200).json({user})
+}
+
 export default {
     register,
-    login
+    login,
+    getProfile
 };
