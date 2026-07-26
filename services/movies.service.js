@@ -39,3 +39,41 @@ export async function searchMovieByName(movieName){
 
     return data;
 }
+
+export async function findMovieByName(movie_name){
+    const { data, error } = await supabase
+        .from('movies')
+        .select('*')
+        .eq('movie_name', movie_name)
+        .maybeSingle()
+    
+    if(error){
+        throw new Error(error.message)
+    }
+
+    return data;
+}
+
+export async function addBooking(full_name, movie_to_watch, seat_number){
+    const { data, error } = await supabase
+        .from('bookings')
+        .insert([
+            {
+                booker_name: full_name,
+                movie_to_watch: movie_to_watch,
+                seat_number: seat_number,
+            }
+        ])
+}
+
+export async function changeSeatStatusToTaken(seat_number){
+    const { data, error } = await supabase
+        .from('seats')
+        .update({ status: "Taken"})
+        .eq('seat_number', seat_number)
+        .select();
+    
+    if(error){
+        throw new Error(error.message)
+    }
+}
