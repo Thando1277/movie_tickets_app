@@ -35,7 +35,8 @@ export async function register(req, res){
                     full_name,
                     email,
                     age,
-                    password: hashedPassword
+                    password: hashedPassword,
+                    role: 'user'
                 }
             ])
             .select();
