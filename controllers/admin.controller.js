@@ -1,4 +1,4 @@
-import { getAllAdmins } from "../services/admin.service.js";
+import { getAllAdmins, createMovie } from "../services/admin.service.js";
 
 export async function getAdmins(req, res){
 
@@ -29,3 +29,34 @@ export async function getAdmins(req, res){
     }
 }
 
+export async function addNewMovie(req, res){
+    try{
+        const user = req.user;
+
+        if(user.role !== 'admin'){
+            return res.status(403).json({
+                message: "Only an admin can add new movies"
+            })
+        }
+
+        const { movie_name, movie_picture, time, date} = req.body;
+
+        if(!movie_name || !movie_picture || !time || !date){
+            return res.status(400).json({
+                message: "Both movie_name and movie_picture are required"
+            })
+        }
+
+        await createMovie(movie_name, movie_picture, time, date);
+
+        return res.status(201).json({
+            message: "New movie successfully added"
+        })
+
+    }catch(error){
+        console.log("Error adding movies, ", error)
+        return res.status(500).json({
+            message: "Internal server error"
+        })
+    }
+}

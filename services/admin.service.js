@@ -12,3 +12,23 @@ export async function getAllAdmins() {
 
     return data;
 }
+
+export async function createMovie(movie_name, movie_picture, time, date){
+    const { data, error} = await supabase
+        .from('movies')
+        .insert([
+            {
+                movie_name: movie_name,
+                movie_picture: movie_picture,
+                time: time,
+                date: date
+            }
+        ])
+        .select()
+        .single()
+    if(error){
+        throw new Error(error.message)
+    }
+
+    return data;
+}
