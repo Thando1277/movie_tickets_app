@@ -32,3 +32,14 @@ export async function createMovie(movie_name, movie_picture, time, date){
 
     return data;
 }
+
+export async function movieDeletion(movie_id){
+    const { data, error} = await supabase
+        .from('movies')
+        .delete()
+        .eq('id', movie_id)
+
+    if(error){
+        throw new Error(error.message)
+    }
+}

@@ -1,4 +1,5 @@
-import { getAllAdmins, createMovie } from "../services/admin.service.js";
+import { getAllAdmins, createMovie, movieDeletion } from "../services/admin.service.js";
+import { findMovieByName } from '../services/movies.service.js';
 
 export async function getAdmins(req, res){
 
@@ -57,6 +58,46 @@ export async function addNewMovie(req, res){
         console.log("Error adding movies, ", error)
         return res.status(500).json({
             message: "Internal server error"
+        })
+    }
+}
+
+export async function removeMovie(req, res){
+    try{
+        const user = req.user;
+
+        if(user.role !== 'admin'){
+            return res.status(400).json({
+                message: 'Only an admin can delete a movie'
+            })
+        }
+
+        const { movie_name } = req.body;
+
+        if(!movie_name){
+            return res.status(404).json({
+                message: 'Movie name field cannot be empty'
+            })
+        }
+
+        const movie = await findMovieByName(movie_name)
+
+        if(!movie){
+            return res.status(404).json({
+                message: 'Movie not found'
+            })
+        }
+
+        await movieDeletion(movie.id);
+
+        return res.status(200).json({
+            message: 'Movie Deleted Successfully'
+        })
+
+    }catch(error){
+        console.log("Error deleting movie, ", error);
+        return res.status(500).josn({
+            message: 'Internal server error'
         })
     }
 }
